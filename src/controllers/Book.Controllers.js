@@ -39,3 +39,41 @@ export const getAllBooks = asyncHandler(async (req,res,next)=>{
         new ApiResponse(201,books,"All Books are here ")
     )
 })
+
+export const deleteOneBook = asyncHandler(async (req,res,next)=>{
+    const book = await Book.findById(req.params.id);
+
+    if(!book){
+        return next(new AppError("Book Not found",400))
+    }
+    const deleteBook = await Book.findByIdAndDelete(req.params.id);
+    res.status(200).json(
+        new ApiResponse(201,book,"Book deleted successfullly ")
+    )
+})
+
+export const updateOneBook = asyncHandler(async(req,res,next)=>{
+    const book = await Book.findByIdAndUpdate(req.params.id,req.body,{new:true})
+    if(!book){
+        return next(new AppError("Book not found",400))
+    }
+
+    res.status(200).json(
+        new ApiResponse(201,book,"Book updated successfully ")
+    )
+
+
+})
+
+export const getOneBook = asyncHandler(async(req,res,next)=>{
+
+    const book = await Book.findById(req.params.id)
+    if(!book){
+        return next(new AppError("Book Not found",400))
+    }
+    res.status(200).json(
+        new ApiResponse(201,book,"Book found successfully ")
+    )
+
+
+})
